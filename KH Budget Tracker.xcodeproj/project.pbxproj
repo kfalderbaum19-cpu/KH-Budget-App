@@ -1,0 +1,583 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		23719FB4302E7DEF006B8AD0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23719F9C302E7DEA006B8AD0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 23719FA3302E7DEA006B8AD0;
+			remoteInfo = "KH Budget Tracker";
+		};
+		23719FBE302E7DEF006B8AD0 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23719F9C302E7DEA006B8AD0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 23719FA3302E7DEA006B8AD0;
+			remoteInfo = "KH Budget Tracker";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		23719FA4302E7DEA006B8AD0 /* KH Budget Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KH Budget Tracker.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		23719FB3302E7DEF006B8AD0 /* KH Budget TrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KH Budget TrackerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		23719FBD302E7DEF006B8AD0 /* KH Budget TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KH Budget TrackerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		23719FA6302E7DEA006B8AD0 /* KH Budget Tracker */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "KH Budget Tracker";
+			sourceTree = "<group>";
+		};
+		23719FB6302E7DEF006B8AD0 /* KH Budget TrackerTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "KH Budget TrackerTests";
+			sourceTree = "<group>";
+		};
+		23719FC0302E7DEF006B8AD0 /* KH Budget TrackerUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "KH Budget TrackerUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		23719FA1302E7DEA006B8AD0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23719FB0302E7DEF006B8AD0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23719FBA302E7DEF006B8AD0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		23719F9B302E7DEA006B8AD0 = {
+			isa = PBXGroup;
+			children = (
+				23719FA6302E7DEA006B8AD0 /* KH Budget Tracker */,
+				23719FB6302E7DEF006B8AD0 /* KH Budget TrackerTests */,
+				23719FC0302E7DEF006B8AD0 /* KH Budget TrackerUITests */,
+				23719FA5302E7DEA006B8AD0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		23719FA5302E7DEA006B8AD0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				23719FA4302E7DEA006B8AD0 /* KH Budget Tracker.app */,
+				23719FB3302E7DEF006B8AD0 /* KH Budget TrackerTests.xctest */,
+				23719FBD302E7DEF006B8AD0 /* KH Budget TrackerUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		23719FA3302E7DEA006B8AD0 /* KH Budget Tracker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23719FC7302E7DEF006B8AD0 /* Build configuration list for PBXNativeTarget "KH Budget Tracker" */;
+			buildPhases = (
+				23719FA0302E7DEA006B8AD0 /* Sources */,
+				23719FA1302E7DEA006B8AD0 /* Frameworks */,
+				23719FA2302E7DEA006B8AD0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				23719FA6302E7DEA006B8AD0 /* KH Budget Tracker */,
+			);
+			name = "KH Budget Tracker";
+			packageProductDependencies = (
+			);
+			productName = "KH Budget Tracker";
+			productReference = 23719FA4302E7DEA006B8AD0 /* KH Budget Tracker.app */;
+			productType = "com.apple.product-type.application";
+		};
+		23719FB2302E7DEF006B8AD0 /* KH Budget TrackerTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23719FCA302E7DEF006B8AD0 /* Build configuration list for PBXNativeTarget "KH Budget TrackerTests" */;
+			buildPhases = (
+				23719FAF302E7DEF006B8AD0 /* Sources */,
+				23719FB0302E7DEF006B8AD0 /* Frameworks */,
+				23719FB1302E7DEF006B8AD0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				23719FB5302E7DEF006B8AD0 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				23719FB6302E7DEF006B8AD0 /* KH Budget TrackerTests */,
+			);
+			name = "KH Budget TrackerTests";
+			packageProductDependencies = (
+			);
+			productName = "KH Budget TrackerTests";
+			productReference = 23719FB3302E7DEF006B8AD0 /* KH Budget TrackerTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		23719FBC302E7DEF006B8AD0 /* KH Budget TrackerUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23719FCD302E7DEF006B8AD0 /* Build configuration list for PBXNativeTarget "KH Budget TrackerUITests" */;
+			buildPhases = (
+				23719FB9302E7DEF006B8AD0 /* Sources */,
+				23719FBA302E7DEF006B8AD0 /* Frameworks */,
+				23719FBB302E7DEF006B8AD0 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				23719FBF302E7DEF006B8AD0 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				23719FC0302E7DEF006B8AD0 /* KH Budget TrackerUITests */,
+			);
+			name = "KH Budget TrackerUITests";
+			packageProductDependencies = (
+			);
+			productName = "KH Budget TrackerUITests";
+			productReference = 23719FBD302E7DEF006B8AD0 /* KH Budget TrackerUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		23719F9C302E7DEA006B8AD0 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2660;
+				LastUpgradeCheck = 2660;
+				TargetAttributes = {
+					23719FA3302E7DEA006B8AD0 = {
+						CreatedOnToolsVersion = 26.6;
+					};
+					23719FB2302E7DEF006B8AD0 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = 23719FA3302E7DEA006B8AD0;
+					};
+					23719FBC302E7DEF006B8AD0 = {
+						CreatedOnToolsVersion = 26.6;
+						TestTargetID = 23719FA3302E7DEA006B8AD0;
+					};
+				};
+			};
+			buildConfigurationList = 23719F9F302E7DEA006B8AD0 /* Build configuration list for PBXProject "KH Budget Tracker" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 23719F9B302E7DEA006B8AD0;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 23719FA5302E7DEA006B8AD0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				23719FA3302E7DEA006B8AD0 /* KH Budget Tracker */,
+				23719FB2302E7DEF006B8AD0 /* KH Budget TrackerTests */,
+				23719FBC302E7DEF006B8AD0 /* KH Budget TrackerUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		23719FA2302E7DEA006B8AD0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23719FB1302E7DEF006B8AD0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23719FBB302E7DEF006B8AD0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		23719FA0302E7DEA006B8AD0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23719FAF302E7DEF006B8AD0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		23719FB9302E7DEF006B8AD0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		23719FB5302E7DEF006B8AD0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 23719FA3302E7DEA006B8AD0 /* KH Budget Tracker */;
+			targetProxy = 23719FB4302E7DEF006B8AD0 /* PBXContainerItemProxy */;
+		};
+		23719FBF302E7DEF006B8AD0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 23719FA3302E7DEA006B8AD0 /* KH Budget Tracker */;
+			targetProxy = 23719FBE302E7DEF006B8AD0 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		23719FC5302E7DEF006B8AD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = RVQ2B527AV;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		23719FC6302E7DEF006B8AD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = RVQ2B527AV;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		23719FC8302E7DEF006B8AD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RVQ2B527AV;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "iOSapp.KH-Budget-Tracker";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		23719FC9302E7DEF006B8AD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RVQ2B527AV;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "iOSapp.KH-Budget-Tracker";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		23719FCB302E7DEF006B8AD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RVQ2B527AV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "iOSapp.KH-Budget-TrackerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KH Budget Tracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KH Budget Tracker";
+			};
+			name = Debug;
+		};
+		23719FCC302E7DEF006B8AD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RVQ2B527AV;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "iOSapp.KH-Budget-TrackerTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KH Budget Tracker.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KH Budget Tracker";
+			};
+			name = Release;
+		};
+		23719FCE302E7DEF006B8AD0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RVQ2B527AV;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "iOSapp.KH-Budget-TrackerUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "KH Budget Tracker";
+			};
+			name = Debug;
+		};
+		23719FCF302E7DEF006B8AD0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = RVQ2B527AV;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "iOSapp.KH-Budget-TrackerUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "KH Budget Tracker";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		23719F9F302E7DEA006B8AD0 /* Build configuration list for PBXProject "KH Budget Tracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23719FC5302E7DEF006B8AD0 /* Debug */,
+				23719FC6302E7DEF006B8AD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		23719FC7302E7DEF006B8AD0 /* Build configuration list for PBXNativeTarget "KH Budget Tracker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23719FC8302E7DEF006B8AD0 /* Debug */,
+				23719FC9302E7DEF006B8AD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		23719FCA302E7DEF006B8AD0 /* Build configuration list for PBXNativeTarget "KH Budget TrackerTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23719FCB302E7DEF006B8AD0 /* Debug */,
+				23719FCC302E7DEF006B8AD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		23719FCD302E7DEF006B8AD0 /* Build configuration list for PBXNativeTarget "KH Budget TrackerUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23719FCE302E7DEF006B8AD0 /* Debug */,
+				23719FCF302E7DEF006B8AD0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 23719F9C302E7DEA006B8AD0 /* Project object */;
+}
