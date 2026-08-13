@@ -22,6 +22,7 @@ struct ContentView: View {
     @State private var note = ""
     @State private var expenseDate = Date()
     @State private var selectedTransactionType = TransactionType.spent
+    @State private var selectedSpendingScope = SpendingScope.week
 
     private var currencyCode: String {
         Locale.current.currency?.identifier ?? "USD"
@@ -35,9 +36,36 @@ struct ContentView: View {
         Calendar.khBudget.date(byAdding: .day, value: 7, to: selectedWeekStart) ?? selectedWeekStart
     }
 
+    private var historyStart: Date {
+        Calendar.khBudget.date(byAdding: .day, value: -51 * 7, to: Calendar.khBudget.startOfWeek(for: Date())) ?? Date()
+    }
+
+    private var historyEnd: Date {
+        Calendar.khBudget.date(byAdding: .day, value: 7, to: Calendar.khBudget.startOfWeek(for: Date())) ?? Date()
+    }
+
+    private var historyDisplayEnd: Date {
+        Calendar.khBudget.date(byAdding: .day, value: -1, to: historyEnd) ?? historyEnd
+    }
+
     private var weekExpenses: [Expense] {
         expenses.filter { expense in
             expense.date >= selectedWeekStart && expense.date < nextWeekStart
+        }
+    }
+
+    private var historyExpenses: [Expense] {
+        expenses.filter { expense in
+            expense.date >= historyStart && expense.date < historyEnd
+        }
+    }
+
+    private var scopedExpenses: [Expense] {
+        switch selectedSpendingScope {
+        case .week:
+            weekExpenses
+        case .allTime:
+            historyExpenses
         }
     }
 
@@ -57,8 +85,24 @@ struct ContentView: View {
         budgetAmount - spentAmount
     }
 
+    private var scopedSpentAmount: Double {
+        scopedExpenses
+            .filter { $0.amount > 0 }
+            .reduce(0) { $0 + $1.amount }
+    }
+
+    private var scopedReceivedAmount: Double {
+        abs(scopedExpenses
+            .filter { $0.amount < 0 }
+            .reduce(0) { $0 + $1.amount })
+    }
+
+    private var scopedNetAmount: Double {
+        scopedExpenses.reduce(0) { $0 + $1.amount }
+    }
+
     private var categoryTotals: [CategoryTotal] {
-        let groupedTotals = Dictionary(grouping: weekExpenses.filter { $0.amount > 0 }, by: { $0.categoryName })
+        let groupedTotals = Dictionary(grouping: scopedExpenses.filter { $0.amount > 0 }, by: { $0.categoryName })
             .mapValues { expenses in expenses.reduce(0) { $0 + $1.amount } }
 
         return groupedTotals
@@ -84,7 +128,14 @@ struct ContentView: View {
     }
 
     private var weekSection: some View {
-        Section("Budget Week") {
+        Section(selectedSpendingScope.summaryTitle) {
+            Picker("View", selection: $selectedSpendingScope) {
+                ForEach(SpendingScope.allCases) { scope in
+                    Text(scope.title).tag(scope)
+                }
+            }
+            .pickerStyle(.segmented)
+
             HStack {
                 Button {
                     moveWeek(by: -1)
@@ -92,13 +143,14 @@ struct ContentView: View {
                     Label("Previous Week", systemImage: "chevron.left")
                 }
                 .labelStyle(.iconOnly)
+                .disabled(selectedSpendingScope == .allTime)
 
                 Spacer()
 
                 VStack(spacing: 4) {
-                    Text(selectedWeekStart, format: .dateTime.month(.abbreviated).day())
+                    Text(selectedSpendingScope == .week ? selectedWeekStart.formatted(.dateTime.month(.abbreviated).day()) : "Last 52 Weeks")
                         .font(.headline)
-                    Text("to \(selectedWeekEnd.formatted(.dateTime.month(.abbreviated).day()))")
+                    Text(selectedSpendingScope.dateRangeText(weekEnd: selectedWeekEnd, historyStart: historyStart, historyEnd: historyDisplayEnd))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -111,18 +163,26 @@ struct ContentView: View {
                     Label("Next Week", systemImage: "chevron.right")
                 }
                 .labelStyle(.iconOnly)
+                .disabled(selectedSpendingScope == .allTime)
             }
 
-            TextField("Weekly budget", text: $budgetText)
-                .keyboardType(.decimalPad)
+            if selectedSpendingScope == .week {
+                TextField("Weekly budget", text: $budgetText)
+                    .keyboardType(.decimalPad)
 
-            Button("Save Budget", action: saveBudget)
-                .disabled(parsedBudgetAmount == nil)
+                Button("Save Budget", action: saveBudget)
+                    .disabled(parsedBudgetAmount == nil)
 
-            LabeledContent("Budget", value: budgetAmount.formatted(.currency(code: currencyCode)))
-            LabeledContent("Spent", value: spentAmount.formatted(.currency(code: currencyCode)))
-            LabeledContent("Remaining", value: remainingAmount.formatted(.currency(code: currencyCode)))
-                .foregroundStyle(remainingAmount < 0 ? .red : .primary)
+                LabeledContent("Budget", value: budgetAmount.formatted(.currency(code: currencyCode)))
+                LabeledContent("Spent", value: spentAmount.formatted(.currency(code: currencyCode)))
+                LabeledContent("Remaining", value: remainingAmount.formatted(.currency(code: currencyCode)))
+                    .foregroundStyle(remainingAmount < 0 ? .red : .primary)
+            } else {
+                LabeledContent("Total Spent", value: scopedSpentAmount.formatted(.currency(code: currencyCode)))
+                LabeledContent("Money Received", value: scopedReceivedAmount.formatted(.currency(code: currencyCode)))
+                    .foregroundStyle(.green)
+                LabeledContent("Net Spending", value: scopedNetAmount.formatted(.currency(code: currencyCode)))
+            }
         }
     }
 
@@ -165,7 +225,7 @@ struct ContentView: View {
 
     @ViewBuilder
     private var chartSection: some View {
-        Section("This Week by Category") {
+        Section(selectedSpendingScope.chartTitle) {
             if categoryTotals.isEmpty {
                 ContentUnavailableView("No spending yet", systemImage: "chart.bar.xaxis")
             } else {
@@ -183,12 +243,12 @@ struct ContentView: View {
     }
 
     private var expensesSection: some View {
-        Section("Expenses") {
-            if weekExpenses.isEmpty {
-                Text("No expenses for this week")
+        Section(selectedSpendingScope.expensesTitle) {
+            if scopedExpenses.isEmpty {
+                Text(selectedSpendingScope.emptyExpensesText)
                     .foregroundStyle(.secondary)
             } else {
-                ForEach(weekExpenses) { expense in
+                ForEach(scopedExpenses) { expense in
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {
                             Text(expense.categoryName)
@@ -277,7 +337,7 @@ struct ContentView: View {
 
     private func deleteExpenses(offsets: IndexSet) {
         for index in offsets {
-            modelContext.delete(weekExpenses[index])
+            modelContext.delete(scopedExpenses[index])
         }
     }
 
@@ -316,6 +376,57 @@ private enum TransactionType: String, CaseIterable, Identifiable {
         switch self {
         case .spent: "Add Expense"
         case .received: "Add Money Received"
+        }
+    }
+}
+
+private enum SpendingScope: String, CaseIterable, Identifiable {
+    case week
+    case allTime
+
+    var id: Self { self }
+
+    var title: String {
+        switch self {
+        case .week: "Week"
+        case .allTime: "Yearly Spend"
+        }
+    }
+
+    var summaryTitle: String {
+        switch self {
+        case .week: "Budget Week"
+        case .allTime: "Yearly Spend Summary"
+        }
+    }
+
+    var chartTitle: String {
+        switch self {
+        case .week: "This Week by Category"
+        case .allTime: "Yearly Spend by Category"
+        }
+    }
+
+    var expensesTitle: String {
+        switch self {
+        case .week: "Expenses"
+        case .allTime: "Yearly Spend Entries"
+        }
+    }
+
+    var emptyExpensesText: String {
+        switch self {
+        case .week: "No expenses for this week"
+        case .allTime: "No entries in the last 52 weeks"
+        }
+    }
+
+    func dateRangeText(weekEnd: Date, historyStart: Date, historyEnd: Date) -> String {
+        switch self {
+        case .week:
+            "to \(weekEnd.formatted(.dateTime.month(.abbreviated).day()))"
+        case .allTime:
+            "from \(historyStart.formatted(.dateTime.month(.abbreviated).day().year())) to \(historyEnd.formatted(.dateTime.month(.abbreviated).day().year()))"
         }
     }
 }
