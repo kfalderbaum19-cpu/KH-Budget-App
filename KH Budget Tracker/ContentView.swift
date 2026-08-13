@@ -21,6 +21,7 @@ struct ContentView: View {
     @State private var categoryName = ""
     @State private var note = ""
     @State private var expenseDate = Date()
+    @State private var selectedTransactionType = TransactionType.spent
 
     private var currencyCode: String {
         Locale.current.currency?.identifier ?? "USD"
@@ -57,7 +58,7 @@ struct ContentView: View {
     }
 
     private var categoryTotals: [CategoryTotal] {
-        let groupedTotals = Dictionary(grouping: weekExpenses, by: { $0.categoryName })
+        let groupedTotals = Dictionary(grouping: weekExpenses.filter { $0.amount > 0 }, by: { $0.categoryName })
             .mapValues { expenses in expenses.reduce(0) { $0 + $1.amount } }
 
         return groupedTotals
@@ -127,6 +128,13 @@ struct ContentView: View {
 
     private var spendingSection: some View {
         Section("Add Spending") {
+            Picker("Type", selection: $selectedTransactionType) {
+                ForEach(TransactionType.allCases) { type in
+                    Text(type.title).tag(type)
+                }
+            }
+            .pickerStyle(.segmented)
+
             TextField("Amount", text: $amountText)
                 .keyboardType(.decimalPad)
 
@@ -150,7 +158,7 @@ struct ContentView: View {
             TextField("Note", text: $note)
             DatePicker("Date", selection: $expenseDate, displayedComponents: .date)
 
-            Button("Add Expense", action: addExpense)
+            Button(selectedTransactionType.buttonTitle, action: addExpense)
                 .disabled(!canAddExpense)
         }
     }
@@ -185,9 +193,13 @@ struct ContentView: View {
                         HStack {
                             Text(expense.categoryName)
                                 .font(.headline)
+                                .foregroundStyle(.primary)
+
                             Spacer()
+
                             Text(expense.amount, format: .currency(code: currencyCode))
                                 .font(.headline)
+                                .foregroundStyle(expense.amount < 0 ? .green : .red)
                         }
 
                         HStack {
@@ -247,8 +259,9 @@ struct ContentView: View {
             modelContext.insert(SpendingCategory(name: normalizedCategory))
         }
 
+        let signedAmount = selectedTransactionType == .received ? -amount : amount
         let expense = Expense(
-            amount: amount,
+            amount: signedAmount,
             categoryName: normalizedCategory,
             note: note.trimmingCharacters(in: .whitespacesAndNewlines),
             date: expenseDate
@@ -259,6 +272,7 @@ struct ContentView: View {
         categoryName = ""
         note = ""
         expenseDate = Date()
+        selectedTransactionType = .spent
     }
 
     private func deleteExpenses(offsets: IndexSet) {
@@ -282,6 +296,27 @@ struct ContentView: View {
         }
 
         return amount
+    }
+}
+
+private enum TransactionType: String, CaseIterable, Identifiable {
+    case spent
+    case received
+
+    var id: Self { self }
+
+    var title: String {
+        switch self {
+        case .spent: "Spent"
+        case .received: "Received"
+        }
+    }
+
+    var buttonTitle: String {
+        switch self {
+        case .spent: "Add Expense"
+        case .received: "Add Money Received"
+        }
     }
 }
 
