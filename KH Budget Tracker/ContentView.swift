@@ -114,7 +114,9 @@ struct ContentView: View {
         NavigationStack {
             Form {
                 weekSection
-                spendingSection
+                if selectedSpendingScope == .week {
+                    spendingSection
+                }
                 chartSection
                 expensesSection
             }
