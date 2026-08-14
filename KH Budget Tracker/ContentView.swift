@@ -240,6 +240,10 @@ struct ContentView: View {
                 }
                 .frame(height: 220)
                 .chartLegend(.hidden)
+
+                ForEach(categoryTotals) { total in
+                    LabeledContent(total.category, value: total.amount.formatted(.currency(code: currencyCode)))
+                }
             }
         }
     }
