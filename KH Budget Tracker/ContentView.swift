@@ -16,6 +16,7 @@ struct ContentView: View {
     @Query(sort: \WeeklyBudget.weekStart, order: .reverse) private var budgets: [WeeklyBudget]
 
     @State private var selectedWeekStart = Calendar.khBudget.startOfWeek(for: Date())
+    @State private var selectedMonthStart = Calendar.khBudget.startOfMonth(for: Date())
     @State private var budgetText = ""
     @State private var amountText = ""
     @State private var categoryName = ""
@@ -36,16 +37,24 @@ struct ContentView: View {
         Calendar.khBudget.date(byAdding: .day, value: 7, to: selectedWeekStart) ?? selectedWeekStart
     }
 
-    private var historyStart: Date {
-        Calendar.khBudget.date(byAdding: .day, value: -51 * 7, to: Calendar.khBudget.startOfWeek(for: Date())) ?? Date()
+    private var selectedMonthEnd: Date {
+        Calendar.khBudget.date(byAdding: .day, value: -1, to: nextMonthStart) ?? selectedMonthStart
     }
 
-    private var historyEnd: Date {
-        Calendar.khBudget.date(byAdding: .day, value: 7, to: Calendar.khBudget.startOfWeek(for: Date())) ?? Date()
+    private var nextMonthStart: Date {
+        Calendar.khBudget.date(byAdding: .month, value: 1, to: selectedMonthStart) ?? selectedMonthStart
     }
 
-    private var historyDisplayEnd: Date {
-        Calendar.khBudget.date(byAdding: .day, value: -1, to: historyEnd) ?? historyEnd
+    private var yearStart: Date {
+        Calendar.khBudget.startOfYear(for: Date())
+    }
+
+    private var nextYearStart: Date {
+        Calendar.khBudget.date(byAdding: .year, value: 1, to: yearStart) ?? yearStart
+    }
+
+    private var yearDisplayEnd: Date {
+        Calendar.khBudget.date(byAdding: .day, value: -1, to: nextYearStart) ?? nextYearStart
     }
 
     private var weekExpenses: [Expense] {
@@ -54,9 +63,15 @@ struct ContentView: View {
         }
     }
 
-    private var historyExpenses: [Expense] {
+    private var monthExpenses: [Expense] {
         expenses.filter { expense in
-            expense.date >= historyStart && expense.date < historyEnd
+            expense.date >= selectedMonthStart && expense.date < nextMonthStart
+        }
+    }
+
+    private var yearExpenses: [Expense] {
+        expenses.filter { expense in
+            expense.date >= yearStart && expense.date < nextYearStart
         }
     }
 
@@ -64,8 +79,10 @@ struct ContentView: View {
         switch selectedSpendingScope {
         case .week:
             weekExpenses
-        case .allTime:
-            historyExpenses
+        case .month:
+            monthExpenses
+        case .year:
+            yearExpenses
         }
     }
 
@@ -120,7 +137,7 @@ struct ContentView: View {
                 chartSection
                 expensesSection
             }
-            .navigationTitle("Weekly Spending")
+            .navigationTitle("Budget Tracker")
             .onAppear(perform: refreshBudgetText)
             .onChange(of: selectedWeekStart) { _, _ in
                 refreshBudgetText()
@@ -140,19 +157,25 @@ struct ContentView: View {
 
             HStack {
                 Button {
-                    moveWeek(by: -1)
+                    moveSelectedPeriodBackward()
                 } label: {
-                    Label("Previous Week", systemImage: "chevron.left")
+                    Label("Previous Period", systemImage: "chevron.left")
                 }
                 .labelStyle(.iconOnly)
-                .disabled(selectedSpendingScope == .allTime)
+                .disabled(selectedSpendingScope == .year)
 
                 Spacer()
 
                 VStack(spacing: 4) {
-                    Text(selectedSpendingScope == .week ? selectedWeekStart.formatted(.dateTime.month(.abbreviated).day()) : "Last 52 Weeks")
+                    Text(selectedSpendingScope.titleText(weekStart: selectedWeekStart, monthStart: selectedMonthStart, yearStart: yearStart))
                         .font(.headline)
-                    Text(selectedSpendingScope.dateRangeText(weekEnd: selectedWeekEnd, historyStart: historyStart, historyEnd: historyDisplayEnd))
+                    Text(selectedSpendingScope.dateRangeText(
+                        weekEnd: selectedWeekEnd,
+                        monthStart: selectedMonthStart,
+                        monthEnd: selectedMonthEnd,
+                        yearStart: yearStart,
+                        yearEnd: yearDisplayEnd
+                    ))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -160,12 +183,12 @@ struct ContentView: View {
                 Spacer()
 
                 Button {
-                    moveWeek(by: 1)
+                    moveSelectedPeriodForward()
                 } label: {
-                    Label("Next Week", systemImage: "chevron.right")
+                    Label("Next Period", systemImage: "chevron.right")
                 }
                 .labelStyle(.iconOnly)
-                .disabled(selectedSpendingScope == .allTime)
+                .disabled(selectedSpendingScope == .year)
             }
 
             if selectedSpendingScope == .week {
@@ -306,6 +329,34 @@ struct ContentView: View {
         }
     }
 
+    private func moveSelectedPeriodBackward() {
+        switch selectedSpendingScope {
+        case .week:
+            moveWeek(by: -1)
+        case .month:
+            moveMonth(by: -1)
+        case .year:
+            break
+        }
+    }
+
+    private func moveSelectedPeriodForward() {
+        switch selectedSpendingScope {
+        case .week:
+            moveWeek(by: 1)
+        case .month:
+            moveMonth(by: 1)
+        case .year:
+            break
+        }
+    }
+
+    private func moveMonth(by months: Int) {
+        if let newMonth = Calendar.khBudget.date(byAdding: .month, value: months, to: selectedMonthStart) {
+            selectedMonthStart = newMonth
+        }
+    }
+
     private func saveBudget() {
         guard let amount = parsedBudgetAmount else { return }
 
@@ -388,51 +439,70 @@ private enum TransactionType: String, CaseIterable, Identifiable {
 
 private enum SpendingScope: String, CaseIterable, Identifiable {
     case week
-    case allTime
+    case month
+    case year
 
     var id: Self { self }
 
     var title: String {
         switch self {
         case .week: "Week"
-        case .allTime: "Yearly Spend"
+        case .month: "Month"
+        case .year: "Year"
         }
     }
 
     var summaryTitle: String {
         switch self {
         case .week: "Budget Week"
-        case .allTime: "Yearly Spend Summary"
+        case .month: "Monthly Spend Summary"
+        case .year: "Yearly Spend Summary"
         }
     }
 
     var chartTitle: String {
         switch self {
         case .week: "This Week by Category"
-        case .allTime: "Yearly Spend by Category"
+        case .month: "Monthly Spend by Category"
+        case .year: "Yearly Spend by Category"
         }
     }
 
     var expensesTitle: String {
         switch self {
         case .week: "Expenses"
-        case .allTime: "Yearly Spend Entries"
+        case .month: "Monthly Spend Entries"
+        case .year: "Yearly Spend Entries"
         }
     }
 
     var emptyExpensesText: String {
         switch self {
         case .week: "No expenses for this week"
-        case .allTime: "No entries in the last 52 weeks"
+        case .month: "No entries for this month"
+        case .year: "No entries for this year"
         }
     }
 
-    func dateRangeText(weekEnd: Date, historyStart: Date, historyEnd: Date) -> String {
+    func titleText(weekStart: Date, monthStart: Date, yearStart: Date) -> String {
+        switch self {
+        case .week:
+            weekStart.formatted(.dateTime.month(.abbreviated).day())
+        case .month:
+            monthStart.formatted(.dateTime.month(.wide).year())
+        case .year:
+            yearStart.formatted(.dateTime.year())
+        }
+    }
+
+    func dateRangeText(weekEnd: Date, monthStart: Date, monthEnd: Date, yearStart: Date, yearEnd: Date) -> String {
         switch self {
         case .week:
             "to \(weekEnd.formatted(.dateTime.month(.abbreviated).day()))"
-        case .allTime:
-            "from \(historyStart.formatted(.dateTime.month(.abbreviated).day().year())) to \(historyEnd.formatted(.dateTime.month(.abbreviated).day().year()))"
+        case .month:
+            "\(monthStart.formatted(.dateTime.month(.abbreviated).day())) to \(monthEnd.formatted(.dateTime.month(.abbreviated).day()))"
+        case .year:
+            "\(yearStart.formatted(.dateTime.month(.abbreviated).day().year())) to \(yearEnd.formatted(.dateTime.month(.abbreviated).day().year()))"
         }
     }
 }
@@ -455,6 +525,16 @@ private extension Calendar {
     func startOfWeek(for date: Date) -> Date {
         let interval = dateInterval(of: .weekOfYear, for: date)
         return startOfDay(for: interval?.start ?? date)
+    }
+
+    func startOfMonth(for date: Date) -> Date {
+        let components = dateComponents([.year, .month], from: date)
+        return self.date(from: components).map { startOfDay(for: $0) } ?? startOfDay(for: date)
+    }
+
+    func startOfYear(for date: Date) -> Date {
+        let components = dateComponents([.year], from: date)
+        return self.date(from: components).map { startOfDay(for: $0) } ?? startOfDay(for: date)
     }
 }
 
