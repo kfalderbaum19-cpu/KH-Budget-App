@@ -92,15 +92,23 @@ struct ContentView: View {
     }
 
     private var budgetAmount: Double {
-        currentBudget?.amount ?? 0
+        baseBudgetAmount(for: selectedWeekStart) ?? 0
     }
 
     private var spentAmount: Double {
-        weekExpenses.reduce(0) { $0 + $1.amount }
+        netSpending(for: selectedWeekStart)
+    }
+
+    private var rolloverAmount: Double {
+        rolloverAmount(for: selectedWeekStart)
+    }
+
+    private var availableBudgetAmount: Double {
+        availableBudgetAmount(for: selectedWeekStart)
     }
 
     private var remainingAmount: Double {
-        budgetAmount - spentAmount
+        availableBudgetAmount - spentAmount
     }
 
     private var scopedSpentAmount: Double {
@@ -203,14 +211,17 @@ struct ContentView: View {
             }
 
             if selectedSpendingScope == .week {
-                TextField("Weekly budget", text: $budgetText)
+                TextField("Weekly base budget", text: $budgetText)
                     .keyboardType(.decimalPad)
 
                 Button("Save Budget", action: saveBudget)
                     .disabled(parsedBudgetAmount == nil)
 
-                LabeledContent("Budget", value: budgetAmount.formatted(.currency(code: currencyCode)))
-                LabeledContent("Spent", value: spentAmount.formatted(.currency(code: currencyCode)))
+                LabeledContent("Base Budget", value: budgetAmount.formatted(.currency(code: currencyCode)))
+                LabeledContent("Rollover", value: rolloverAmount.formatted(.currency(code: currencyCode)))
+                    .foregroundStyle(rolloverAmount < 0 ? .red : .green)
+                LabeledContent("Available", value: availableBudgetAmount.formatted(.currency(code: currencyCode)))
+                LabeledContent("Net Spent", value: spentAmount.formatted(.currency(code: currencyCode)))
                 LabeledContent("Remaining", value: remainingAmount.formatted(.currency(code: currencyCode)))
                     .foregroundStyle(remainingAmount < 0 ? .red : .primary)
             } else {
@@ -384,6 +395,56 @@ struct ContentView: View {
         }
     }
 
+    private func budget(for weekStart: Date) -> WeeklyBudget? {
+        budgets.first { Calendar.khBudget.isDate($0.weekStart, inSameDayAs: weekStart) }
+    }
+
+    private func baseBudgetAmount(for weekStart: Date, lookbackLimit: Int = 52) -> Double? {
+        if let budget = budget(for: weekStart) {
+            return budget.amount
+        }
+
+        guard
+            lookbackLimit > 0,
+            let previousWeekStart = Calendar.khBudget.date(byAdding: .day, value: -7, to: weekStart)
+        else {
+            return nil
+        }
+
+        return baseBudgetAmount(for: previousWeekStart, lookbackLimit: lookbackLimit - 1)
+    }
+
+    private func availableBudgetAmount(for weekStart: Date, lookbackLimit: Int = 52) -> Double {
+        guard let baseBudget = baseBudgetAmount(for: weekStart, lookbackLimit: lookbackLimit) else {
+            return 0
+        }
+
+        return baseBudget + rolloverAmount(for: weekStart, lookbackLimit: lookbackLimit)
+    }
+
+    private func rolloverAmount(for weekStart: Date, lookbackLimit: Int = 52) -> Double {
+        guard
+            lookbackLimit > 0,
+            let previousWeekStart = Calendar.khBudget.date(byAdding: .day, value: -7, to: weekStart),
+            baseBudgetAmount(for: previousWeekStart, lookbackLimit: lookbackLimit - 1) != nil
+        else {
+            return 0
+        }
+
+        let previousAvailableBudget = availableBudgetAmount(for: previousWeekStart, lookbackLimit: lookbackLimit - 1)
+        return previousAvailableBudget - netSpending(for: previousWeekStart)
+    }
+
+    private func netSpending(for weekStart: Date) -> Double {
+        guard let nextWeekStart = Calendar.khBudget.date(byAdding: .day, value: 7, to: weekStart) else {
+            return 0
+        }
+
+        return expenses
+            .filter { $0.date >= weekStart && $0.date < nextWeekStart }
+            .reduce(0) { $0 + $1.amount }
+    }
+
     private func addExpense() {
         guard let amount = parsedExpenseAmount else { return }
 
@@ -422,7 +483,7 @@ struct ContentView: View {
     }
 
     private func refreshBudgetText() {
-        budgetText = currentBudget?.amount.formatted(.number.precision(.fractionLength(2))) ?? ""
+        budgetText = baseBudgetAmount(for: selectedWeekStart)?.formatted(.number.precision(.fractionLength(2))) ?? ""
     }
 
     private func parseMoney(_ value: String) -> Double? {
