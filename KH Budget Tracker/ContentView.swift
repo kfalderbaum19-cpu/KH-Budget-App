@@ -24,6 +24,7 @@ struct ContentView: View {
     @State private var expenseDate = Date()
     @State private var selectedTransactionType = TransactionType.spent
     @State private var selectedSpendingScope = SpendingScope.week
+    @State private var selectedExpense: Expense?
 
     private var currencyCode: String {
         Locale.current.currency?.identifier ?? "USD"
@@ -142,6 +143,14 @@ struct ContentView: View {
             .onChange(of: selectedWeekStart) { _, _ in
                 refreshBudgetText()
                 expenseDate = selectedWeekStart
+            }
+            .sheet(item: $selectedExpense) { expense in
+                EditExpenseView(
+                    expense: expense,
+                    categories: categories,
+                    currencyCode: currencyCode,
+                    saveCategoryIfNeeded: saveCategoryIfNeeded
+                )
             }
         }
     }
@@ -278,28 +287,33 @@ struct ContentView: View {
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(scopedExpenses) { expense in
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            Text(expense.categoryName)
-                                .font(.headline)
-                                .foregroundStyle(.primary)
+                    Button {
+                        selectedExpense = expense
+                    } label: {
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(expense.categoryName)
+                                    .font(.headline)
+                                    .foregroundStyle(.primary)
 
-                            Spacer()
+                                Spacer()
 
-                            Text(expense.amount, format: .currency(code: currencyCode))
-                                .font(.headline)
-                                .foregroundStyle(expense.amount < 0 ? .green : .red)
-                        }
-
-                        HStack {
-                            Text(expense.date, format: .dateTime.weekday(.abbreviated).month(.abbreviated).day())
-                            if !expense.note.isEmpty {
-                                Text(expense.note)
+                                Text(expense.amount, format: .currency(code: currencyCode))
+                                    .font(.headline)
+                                    .foregroundStyle(expense.amount < 0 ? .green : .red)
                             }
+
+                            HStack {
+                                Text(expense.date, format: .dateTime.weekday(.abbreviated).month(.abbreviated).day())
+                                if !expense.note.isEmpty {
+                                    Text(expense.note)
+                                }
+                            }
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
                         }
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
                     }
+                    .buttonStyle(.plain)
                 }
                 .onDelete(perform: deleteExpenses)
             }
@@ -372,9 +386,7 @@ struct ContentView: View {
         guard let amount = parsedExpenseAmount else { return }
 
         let normalizedCategory = trimmedCategoryName
-        if !categories.contains(where: { $0.name.caseInsensitiveCompare(normalizedCategory) == .orderedSame }) {
-            modelContext.insert(SpendingCategory(name: normalizedCategory))
-        }
+        saveCategoryIfNeeded(normalizedCategory)
 
         let signedAmount = selectedTransactionType == .received ? -amount : amount
         let expense = Expense(
@@ -395,6 +407,15 @@ struct ContentView: View {
     private func deleteExpenses(offsets: IndexSet) {
         for index in offsets {
             modelContext.delete(scopedExpenses[index])
+        }
+    }
+
+    private func saveCategoryIfNeeded(_ name: String) {
+        let normalizedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !normalizedName.isEmpty else { return }
+
+        if !categories.contains(where: { $0.name.caseInsensitiveCompare(normalizedName) == .orderedSame }) {
+            modelContext.insert(SpendingCategory(name: normalizedName))
         }
     }
 
@@ -434,6 +455,123 @@ private enum TransactionType: String, CaseIterable, Identifiable {
         case .spent: "Add Expense"
         case .received: "Add Money Received"
         }
+    }
+}
+
+private struct EditExpenseView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    let expense: Expense
+    let categories: [SpendingCategory]
+    let currencyCode: String
+    let saveCategoryIfNeeded: (String) -> Void
+
+    @State private var amountText: String
+    @State private var categoryName: String
+    @State private var note: String
+    @State private var expenseDate: Date
+    @State private var selectedTransactionType: TransactionType
+
+    init(
+        expense: Expense,
+        categories: [SpendingCategory],
+        currencyCode: String,
+        saveCategoryIfNeeded: @escaping (String) -> Void
+    ) {
+        self.expense = expense
+        self.categories = categories
+        self.currencyCode = currencyCode
+        self.saveCategoryIfNeeded = saveCategoryIfNeeded
+        _amountText = State(initialValue: abs(expense.amount).formatted(.number.precision(.fractionLength(2))))
+        _categoryName = State(initialValue: expense.categoryName)
+        _note = State(initialValue: expense.note)
+        _expenseDate = State(initialValue: expense.date)
+        _selectedTransactionType = State(initialValue: expense.amount < 0 ? .received : .spent)
+    }
+
+    private var parsedAmount: Double? {
+        let sanitizedValue = amountText
+            .replacingOccurrences(of: "$", with: "")
+            .replacingOccurrences(of: ",", with: "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        guard let amount = Double(sanitizedValue), amount > 0 else {
+            return nil
+        }
+
+        return amount
+    }
+
+    private var trimmedCategoryName: String {
+        categoryName.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var canSave: Bool {
+        parsedAmount != nil && !trimmedCategoryName.isEmpty
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Entry") {
+                    Picker("Type", selection: $selectedTransactionType) {
+                        ForEach(TransactionType.allCases) { type in
+                            Text(type.title).tag(type)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+
+                    TextField("Amount", text: $amountText)
+                        .keyboardType(.decimalPad)
+
+                    TextField("Category", text: $categoryName)
+                        .textInputAutocapitalization(.words)
+
+                    if !categories.isEmpty {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(categories) { category in
+                                    Button(category.name) {
+                                        categoryName = category.name
+                                    }
+                                    .buttonStyle(.bordered)
+                                }
+                            }
+                            .padding(.vertical, 2)
+                        }
+                    }
+
+                    TextField("Note", text: $note)
+                    DatePicker("Date", selection: $expenseDate, displayedComponents: .date)
+                }
+            }
+            .navigationTitle("Edit Entry")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save", action: saveChanges)
+                        .disabled(!canSave)
+                }
+            }
+        }
+    }
+
+    private func saveChanges() {
+        guard let amount = parsedAmount else { return }
+
+        let normalizedCategory = trimmedCategoryName
+        saveCategoryIfNeeded(normalizedCategory)
+
+        expense.amount = selectedTransactionType == .received ? -amount : amount
+        expense.categoryName = normalizedCategory
+        expense.note = note.trimmingCharacters(in: .whitespacesAndNewlines)
+        expense.date = expenseDate
+        dismiss()
     }
 }
 
