@@ -171,6 +171,7 @@ struct ContentView: View {
                     Label("Previous Period", systemImage: "chevron.left")
                 }
                 .labelStyle(.iconOnly)
+                .buttonStyle(.borderless)
                 .disabled(selectedSpendingScope == .year)
 
                 Spacer()
@@ -197,6 +198,7 @@ struct ContentView: View {
                     Label("Next Period", systemImage: "chevron.right")
                 }
                 .labelStyle(.iconOnly)
+                .buttonStyle(.borderless)
                 .disabled(selectedSpendingScope == .year)
             }
 
